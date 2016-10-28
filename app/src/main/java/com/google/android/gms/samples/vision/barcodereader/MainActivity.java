@@ -120,7 +120,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                     //luego de obtener barcode
-                    url = "http://192.168.43.183:8008/?"+barcode.displayValue;
+                    url = "http://10.112.8.203:8008/?"+barcode.displayValue;
                     //url = "http://www.mocky.io/v2/5812ac760f0000391e0bac92";
                     show.execute();
 
