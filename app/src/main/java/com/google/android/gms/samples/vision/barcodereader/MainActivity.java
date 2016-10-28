@@ -120,8 +120,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                     //luego de obtener barcode
-                    //url = "www.gola.com/"+barcode.displayValue;
-                    url = "http://www.mocky.io/v2/5812ac760f0000391e0bac92";
+                    url = "http://192.168.43.183:8008/?"+barcode.displayValue;
+                    //url = "http://www.mocky.io/v2/5812ac760f0000391e0bac92";
                     show.execute();
 
                 } else {
@@ -147,6 +147,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         @Override
         protected String doInBackground(Void... params) {
             String resultado = new Server().connectToServer(url, 15000);
+
             return resultado;
         }
 
