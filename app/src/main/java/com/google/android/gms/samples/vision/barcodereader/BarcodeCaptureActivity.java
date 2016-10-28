@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -44,7 +45,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.samples.vision.barcodereader.ui.camera.CameraSource;
 import com.google.android.gms.samples.vision.barcodereader.ui.camera.CameraSourcePreview;
-
 import com.google.android.gms.samples.vision.barcodereader.ui.camera.GraphicOverlay;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -59,6 +59,7 @@ import java.io.IOException;
  */
 public final class BarcodeCaptureActivity extends AppCompatActivity {
     private static final String TAG = "Barcode-reader";
+    private int timer = 500;
 
     // intent request code to handle updating play services if needed.
     private static final int RC_HANDLE_GMS = 9001;
@@ -106,9 +107,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        Snackbar.make(mGraphicOverlay, "Pulsar para capturar",
-                Snackbar.LENGTH_LONG)
-                .show();
+        Snackbar.make(mGraphicOverlay, "Apunte para capturar", Snackbar.LENGTH_INDEFINITE).show();
+        search.execute();
     }
 
     /**
@@ -426,4 +426,49 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
             mCameraSource.doZoom(detector.getScaleFactor());
         }
     }
+    AsyncTask<Void, Void, String> search = new AsyncTask<Void, Void, String>() {
+
+        @Override
+        protected void onPreExecute(){
+
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            while(true){
+                if(onTap(0,0)){
+                    break;
+                }
+                else {
+                    try {
+                        Thread.sleep(timer);
+                        //return "good";
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        //return "bad";
+                        break;
+                    }
+                }
+            }
+            return "bad";
+            //String resultado = new Server().connectToServer(url, 15000);
+            //return resultado;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            //if(result != null){
+            //    System.out.println(result);
+            //    producto = getLista(result);
+            //    name.setText("Nombre: "+producto.getNombre());
+            //    description.setText("Descripción: "+producto.getDescription());
+            //    barcodeValue.setText("Valor: "+producto.getValor());
+
+                //mAdapter = new UIAdapter(reposes);
+                //mRecyclerView.setAdapter(mAdapter);
+                //((UIAdapter) mAdapter).setOnClickListener(Main2Activity.this); // Bind the listener
+            //}
+        }
+    };
+
 }

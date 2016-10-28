@@ -16,16 +16,22 @@
 
 package com.google.android.gms.samples.vision.barcodereader;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.samples.vision.barcodereader.conexion.Server;
+import com.google.android.gms.samples.vision.barcodereader.modelo.Producto;
 import com.google.android.gms.vision.barcode.Barcode;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
@@ -38,6 +44,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private CompoundButton useFlash;
     private TextView statusMessage;
     private TextView barcodeValue;
+    private TextView name;
+    private TextView description;
+
+    private String url;
+    private Producto producto;
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
@@ -49,6 +60,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         statusMessage = (TextView)findViewById(R.id.status_message);
         barcodeValue = (TextView)findViewById(R.id.barcode_value);
+        name = (TextView)findViewById(R.id.name);
+        description = (TextView)findViewById(R.id.description);
 
         //autoFocus = (CompoundButton) findViewById(R.id.auto_focus);
         useFlash = (CompoundButton) findViewById(R.id.use_flash);
@@ -104,8 +117,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     statusMessage.setText(R.string.barcode_success);
-                    barcodeValue.setText(barcode.displayValue);
+
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
+                    //luego de obtener barcode
+                    //url = "www.gola.com/"+barcode.displayValue;
+                    url = "http://www.mocky.io/v2/5812ac760f0000391e0bac92";
+                    show.execute();
+
                 } else {
                     statusMessage.setText(R.string.barcode_failure);
                     Log.d(TAG, "No barcode captured, intent data is null");
@@ -117,6 +135,48 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
         else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+    AsyncTask<Void, Void, String> show = new AsyncTask<Void, Void, String>() {
+
+        @Override
+        protected void onPreExecute(){
+
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String resultado = new Server().connectToServer(url, 15000);
+            return resultado;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if(result != null){
+                System.out.println(result);
+                producto = getLista(result);
+                name.setText("Nombre: "+producto.getNombre());
+                description.setText("Descripción: "+producto.getDescription());
+                barcodeValue.setText("Valor: "+producto.getValor());
+
+                //mAdapter = new UIAdapter(reposes);
+                //mRecyclerView.setAdapter(mAdapter);
+                //((UIAdapter) mAdapter).setOnClickListener(Main2Activity.this); // Bind the listener
+            }
+        }
+    };
+    private Producto getLista(String result){
+        Producto producto = new Producto();
+        try {
+            JSONObject objeto = new JSONObject(result);
+            producto.setId(objeto.getInt("id"));
+            producto.setNombre(objeto.getString("name"));
+            producto.setDescription(objeto.getString("description"));
+            producto.setValor(objeto.getString("value"));
+            return producto;
+        }catch (JSONException e) {
+            e.printStackTrace();
+            return producto;
         }
     }
 }
