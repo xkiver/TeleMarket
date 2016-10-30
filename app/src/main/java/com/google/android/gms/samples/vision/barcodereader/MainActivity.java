@@ -120,8 +120,37 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     Log.d(TAG, "Barcode read: " + barcode.displayValue);
                     //luego de obtener barcode
-                    url = "http://10.112.8.203:8008/?"+barcode.displayValue;
+                    //url = "http://10.112.8.203:8008/?"+barcode.displayValue;
                     //url = "http://www.mocky.io/v2/5812ac760f0000391e0bac92";
+                    url = "http://telemarket.telprojects.xyz/?"+barcode.displayValue;
+                    AsyncTask<Void, Void, String> show = new AsyncTask<Void, Void, String>() {
+
+                        @Override
+                        protected void onPreExecute(){
+
+                        }
+
+                        @Override
+                        protected String doInBackground(Void... params) {
+                            String resultado = new Server().connectToServer(url, 15000);
+                            return resultado;
+                        }
+
+                        @Override
+                        protected void onPostExecute(String result) {
+                            if(result != null){
+                                System.out.println(result);
+                                producto = getLista(result);
+                                name.setText("Nombre: "+producto.getNombre());
+                                description.setText("Descripción: "+producto.getDescription());
+                                barcodeValue.setText("Valor: "+producto.getValor());
+
+                                //mAdapter = new UIAdapter(reposes);
+                                //mRecyclerView.setAdapter(mAdapter);
+                                //((UIAdapter) mAdapter).setOnClickListener(Main2Activity.this); // Bind the listener
+                            }
+                        }
+                    };
                     show.execute();
 
                 } else {
@@ -137,35 +166,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-    AsyncTask<Void, Void, String> show = new AsyncTask<Void, Void, String>() {
 
-        @Override
-        protected void onPreExecute(){
-
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            String resultado = new Server().connectToServer(url, 15000);
-
-            return resultado;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if(result != null){
-                System.out.println(result);
-                producto = getLista(result);
-                name.setText("Nombre: "+producto.getNombre());
-                description.setText("Descripción: "+producto.getDescription());
-                barcodeValue.setText("Valor: "+producto.getValor());
-
-                //mAdapter = new UIAdapter(reposes);
-                //mRecyclerView.setAdapter(mAdapter);
-                //((UIAdapter) mAdapter).setOnClickListener(Main2Activity.this); // Bind the listener
-            }
-        }
-    };
     private Producto getLista(String result){
         Producto producto = new Producto();
         try {
