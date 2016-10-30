@@ -57,6 +57,8 @@ import java.io.IOException;
  * rear facing camera. During detection overlay graphics are drawn to indicate the position,
  * size, and ID of each barcode.
  */
+
+
 public final class BarcodeCaptureActivity extends AppCompatActivity {
     private static final String TAG = "Barcode-reader";
     private int timer = 500;
@@ -108,6 +110,49 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
         Snackbar.make(mGraphicOverlay, "Apunte para capturar", Snackbar.LENGTH_INDEFINITE).show();
+        AsyncTask<Void, Void, String> search = new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected void onPreExecute() {
+
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                while (true) {
+                    if (onTap(0, 0)) {
+                        break;
+                    } else {
+                        try {
+                            Thread.sleep(timer);
+                            //return "good";
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            //return "bad";
+                            break;
+                        }
+                    }
+                }
+                return "bad";
+                //String resultado = new Server().connectToServer(url, 15000);
+                //return resultado;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                //if(result != null){
+                //    System.out.println(result);
+                //    producto = getLista(result);
+                //    name.setText("Nombre: "+producto.getNombre());
+                //    description.setText("Descripción: "+producto.getDescription());
+                //    barcodeValue.setText("Valor: "+producto.getValor());
+
+                //mAdapter = new UIAdapter(reposes);
+                //mRecyclerView.setAdapter(mAdapter);
+                //((UIAdapter) mAdapter).setOnClickListener(Main2Activity.this); // Bind the listener
+                //}
+            }
+        };
         search.execute();
     }
 
@@ -156,7 +201,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
      * Creates and starts the camera.  Note that this uses a higher resolution in comparison
      * to other detection examples to enable the barcode detector to detect small barcodes
      * at long distances.
-     *
+     * <p>
      * Suppressing InlinedApi since there is a check that the minimum version is met before using
      * the constant.
      */
@@ -203,10 +248,12 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(1600, 1024)
                 .setRequestedFps(15.0f);
+
         // make sure that auto focus is an available option
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            builder = builder.setFocusMode(
-                    autoFocus ? Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE : null);
+            builder = builder.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                    //autoFocus ? Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE : null);
+                    //true);
         }
 
         mCameraSource = builder
@@ -275,7 +322,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
             // we have permission, so create the camerasource
-            boolean autoFocus = getIntent().getBooleanExtra(AutoFocus,false);
+            boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, false);
             boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
             createCameraSource(autoFocus, useFlash);
             return;
@@ -425,50 +472,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         public void onScaleEnd(ScaleGestureDetector detector) {
             mCameraSource.doZoom(detector.getScaleFactor());
         }
+
+
     }
-    AsyncTask<Void, Void, String> search = new AsyncTask<Void, Void, String>() {
-
-        @Override
-        protected void onPreExecute(){
-
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            while(true){
-                if(onTap(0,0)){
-                    break;
-                }
-                else {
-                    try {
-                        Thread.sleep(timer);
-                        //return "good";
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        //return "bad";
-                        break;
-                    }
-                }
-            }
-            return "bad";
-            //String resultado = new Server().connectToServer(url, 15000);
-            //return resultado;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            //if(result != null){
-            //    System.out.println(result);
-            //    producto = getLista(result);
-            //    name.setText("Nombre: "+producto.getNombre());
-            //    description.setText("Descripción: "+producto.getDescription());
-            //    barcodeValue.setText("Valor: "+producto.getValor());
-
-                //mAdapter = new UIAdapter(reposes);
-                //mRecyclerView.setAdapter(mAdapter);
-                //((UIAdapter) mAdapter).setOnClickListener(Main2Activity.this); // Bind the listener
-            //}
-        }
-    };
-
 }
