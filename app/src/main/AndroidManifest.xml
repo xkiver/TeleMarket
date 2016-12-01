@@ -25,16 +25,23 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <activity android:name=".BarcodeCaptureActivity"
-            android:label="Captura TeleMarket"/>
+            android:label="Captura TeleMarket"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".RespuestaActivity"
+            android:label="Respuesta TeleMarket"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

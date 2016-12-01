@@ -84,7 +84,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
             intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
 
-            startActivityForResult(intent, RC_BARCODE_CAPTURE);
+            //startActivityForResult(intent, RC_BARCODE_CAPTURE);
+            startActivity(intent);
         }
 
     }
