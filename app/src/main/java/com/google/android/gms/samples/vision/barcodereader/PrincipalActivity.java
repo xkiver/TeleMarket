@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ public class PrincipalActivity extends Activity implements View.OnClickListener{
         boton3.setOnClickListener(this);
     }
 
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -45,10 +48,35 @@ public class PrincipalActivity extends Activity implements View.OnClickListener{
                 //startActivity(i3);
                 Context context = getApplicationContext();
                 CharSequence text = "Aún no implementado!";
-                int duration = Toast.LENGTH_LONG;
+                int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
                 break;
         }
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            /**
+             * You should manage the action to show the favorite items saved by the user
+             */
+            //Intent i = new Intent(MainActivity.this,Main2Activity.class);
+            //startActivity(i);
+            //return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

@@ -71,6 +71,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
     // constants used to pass extra data in the intent
     public static final String AutoFocus = "AutoFocus";
     public static final String UseFlash = "UseFlash";
+    public String code_s;
     public static final String BarcodeObject = "Barcode";
 
     private CameraSource mCameraSource;
@@ -97,7 +98,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         // read parameters from the intent used to launch the activity.
         boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, true);
         boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
-
+        code_s = (String) getIntent().getExtras().get("code_s");
+        System.out.println("Codigo en cámara: "+code_s);
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
@@ -411,7 +413,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
             finish();*/
             Intent i = new Intent(BarcodeCaptureActivity.this,RespuestaActivity.class);
             i.putExtra("ID",best);
-            i.putExtra(BarcodeObject,best);
+            i.putExtra("code_s",code_s);
+            //i.putExtra(BarcodeObject,best);
             startActivity(i);
             return true;
         }

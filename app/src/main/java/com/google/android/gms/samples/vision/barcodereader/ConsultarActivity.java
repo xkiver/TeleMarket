@@ -47,6 +47,7 @@ public class ConsultarActivity extends Activity implements View.OnClickListener 
     private TextView barcodeValue;
     private TextView name;
     private TextView description;
+    private String code_s ="00000";
 
     private String url;
     private Producto producto;
@@ -83,6 +84,7 @@ public class ConsultarActivity extends Activity implements View.OnClickListener 
             //intent.putExtra(BarcodeCaptureActivity.AutoFocus, autoFocus.isChecked());
             intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
             intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
+            intent.putExtra("code_s", code_s);
 
             //startActivityForResult(intent, RC_BARCODE_CAPTURE);
             startActivity(intent);
