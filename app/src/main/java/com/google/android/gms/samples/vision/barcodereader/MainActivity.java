@@ -41,6 +41,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     // use a compound button so either checkbox or switch widgets work.
     //private CompoundButton autoFocus;
+    //cambio menor
     private CompoundButton useFlash;
     private TextView statusMessage;
     private TextView barcodeValue;
