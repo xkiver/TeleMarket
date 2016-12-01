@@ -31,9 +31,6 @@ public class RespuestaActivity extends Activity {
         texto2 = (TextView) findViewById(R.id.textView2);
         texto3 = (TextView) findViewById(R.id.textView3);
 
-
-        System.out.println("Por acá!");
-
         Intent i = getIntent();
 
         Bundle extras = i.getExtras();

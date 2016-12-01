@@ -37,7 +37,7 @@ import org.json.JSONObject;
  * Main activity demonstrating how to pass extra parameters to an activity that
  * reads barcodes.
  */
-public class MainActivity extends Activity implements View.OnClickListener {
+public class ConsultarActivity extends Activity implements View.OnClickListener {
 
     // use a compound button so either checkbox or switch widgets work.
     //private CompoundButton autoFocus;

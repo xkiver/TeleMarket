@@ -23,24 +23,40 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
+        <activity android:name=".PrincipalActivity"
+            android:label="Respuesta TeleMarket"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>>
+
+        <activity android:name=".SupermercadosActivity"
+            android:label="Respuesta TeleMarket"
+            android:screenOrientation="portrait">
+        </activity>>
+
+        <activity
+            android:name=".ConsultarActivity"
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait">
+
 
         </activity>
 
         <activity android:name=".BarcodeCaptureActivity"
             android:label="Captura TeleMarket"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+
+            </activity>>
+
+
         <activity android:name=".RespuestaActivity"
             android:label="Respuesta TeleMarket"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+            </activity>>
 
     </application>
 
