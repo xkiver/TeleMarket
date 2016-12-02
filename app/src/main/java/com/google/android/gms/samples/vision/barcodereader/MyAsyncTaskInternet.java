@@ -11,19 +11,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by Patricio on 01-12-2016.
  */
 
-public class MyAsyncTask {
+public class MyAsyncTaskInternet {
     private RecyclerView.Adapter mAdapter;
-    private static MyAsyncTask instance;
+    private static MyAsyncTaskInternet instance;
 
-    public static MyAsyncTask getInstance() {
+    public static MyAsyncTaskInternet getInstance() {
         if(instance == null) {
-            instance = new MyAsyncTask();
+            instance = new MyAsyncTaskInternet();
         }
         return instance;
     }
@@ -38,7 +40,8 @@ public class MyAsyncTask {
 
             @Override
             protected String doInBackground(Void... params) {
-                String resultado = new Server().connectToServer("http://telemarket.telprojects.xyz/?s"+code_s+"c"+code_p, 15000);
+                //String resultado = new Server().connectToServer("http://telemarket.telprojects.xyz/?s"+code_s+"c"+code_p, 15000);
+                String resultado = new Server().connectToServer("http://www.mocky.io/v2/5841ae5d100000320cbb4ccf", 15000);
                 return resultado;
             }
 
@@ -59,6 +62,7 @@ public class MyAsyncTask {
     }
     public List<Producto> getFeeds(String result) {
         List<Producto> listaProductos = new ArrayList<>();
+
         try {
             JSONArray lista = new JSONArray(result);
             int size = lista.length();
@@ -77,6 +81,15 @@ public class MyAsyncTask {
                 prod.setValor(objeto.getString("value"));
                 listaProductos.add(prod);
             }
+
+            Collections.sort(listaProductos, new Comparator<Producto>(){
+
+                @Override
+                public int compare(Producto o1, Producto o2) {
+                    return new Integer(o1.getValor()).compareTo(new Integer(o2.getValor()));
+                }
+
+            });
             return listaProductos;
         }catch (JSONException e) {
             e.printStackTrace();

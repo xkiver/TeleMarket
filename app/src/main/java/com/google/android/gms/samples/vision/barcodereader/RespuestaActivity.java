@@ -1,10 +1,12 @@
 package com.google.android.gms.samples.vision.barcodereader;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.samples.vision.barcodereader.modelo.Producto;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -12,11 +14,14 @@ import com.google.android.gms.vision.barcode.Barcode;
 /**
  * Created by Patricio on 01-12-2016.
  */
-public class RespuestaActivity extends Activity {
+public class RespuestaActivity extends AppCompatActivity {
     private String url;
     private Producto producto;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
+    private Barcode best;
+    private String code_s;
+    private boolean first = true;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -24,13 +29,12 @@ public class RespuestaActivity extends Activity {
         createMyRecyclerView();
 
         Intent i = getIntent();
-
         Bundle extras = i.getExtras();
         BarcodeCaptureActivity.fa.finish();
         if (extras != null) {
-            Barcode best = (Barcode) extras.get("ID");
-            String code_s = (String) extras.get("code_s");
-            MyAsyncTask.getInstance().executeMyAsynctask(this, mRecyclerView,1,code_s,best.displayValue);
+            best = (Barcode) extras.get("ID");
+            code_s = (String) extras.get("code_s");
+            MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,code_s,best.displayValue);
             /*url = "http://telemarket.telprojects.xyz/?"+best.displayValue;
             AsyncTask<Void, Void, String> show = new AsyncTask<Void, Void, String>() {
 
@@ -60,6 +64,18 @@ public class RespuestaActivity extends Activity {
             show.execute();*/
         }
     }
+    public void onPause() {
+        super.onPause();
+        first = false;
+    }
+
+    public void onResume(){
+        super.onResume();
+        if (!first){
+            MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,code_s,best.displayValue);
+        }
+
+    }
     public void createMyRecyclerView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
@@ -82,5 +98,26 @@ public class RespuestaActivity extends Activity {
             return producto;
         }
     }*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(RespuestaActivity.this,ShopCarActivity.class);
+            startActivity(i);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

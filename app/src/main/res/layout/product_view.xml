@@ -26,17 +26,22 @@
             android:layout_width="264dp"
             android:layout_height="wrap_content"
             android:id="@+id/textName"
-            android:layout_weight="0.26" />
+            android:layout_weight="0.26"
+            android:textStyle="normal|bold"
+            android:textAlignment="viewStart" />
 
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/textDescription"
             android:layout_width="264dp"
-            android:layout_weight="0.79" />
+            android:layout_weight="0.34"
+            android:textStyle="normal|italic"
+            android:textAlignment="viewStart" />
 
         <TextView
             android:layout_height="29dp"
             android:id="@+id/textValor"
-            android:layout_width="264dp" />
+            android:layout_width="264dp"
+            android:textAlignment="center" />
     </LinearLayout>
 </RelativeLayout>

@@ -16,28 +16,22 @@
 
 package com.google.android.gms.samples.vision.barcodereader;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.samples.vision.barcodereader.conexion.Server;
 import com.google.android.gms.samples.vision.barcodereader.modelo.Producto;
-import com.google.android.gms.vision.barcode.Barcode;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
  * reads barcodes.
  */
-public class ConsultarActivity extends Activity implements View.OnClickListener {
+public class ConsultarActivity extends AppCompatActivity implements View.OnClickListener {
 
     // use a compound button so either checkbox or switch widgets work.
     //private CompoundButton autoFocus;
@@ -51,6 +45,7 @@ public class ConsultarActivity extends Activity implements View.OnClickListener 
 
     private String url;
     private Producto producto;
+    private String region;
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
@@ -69,6 +64,14 @@ public class ConsultarActivity extends Activity implements View.OnClickListener 
         useFlash = (CompoundButton) findViewById(R.id.use_flash);
 
         findViewById(R.id.read_barcode).setOnClickListener(this);
+
+
+        Intent i = getIntent();
+        Bundle extras = i.getExtras();
+        if (extras != null) {
+            region = (String) extras.get("REGION");
+        }
+
     }
 
     /**
@@ -103,17 +106,20 @@ public class ConsultarActivity extends Activity implements View.OnClickListener 
      * activity is re-starting.
      * <p/>
      *
-     * @param requestCode The integer request code originally supplied to
+     //* @param requestCode The integer request code originally supplied to
      *                    startActivityForResult(), allowing you to identify who this
      *                    result came from.
-     * @param resultCode  The integer result code returned by the child activity
+     //* @param resultCode  The integer result code returned by the child activity
+     *
      *                    through its setResult().
-     * @param data        An Intent, which can return result data to the caller
+     //* @param data        An Intent, which can return result data to the caller
      *                    (various data can be attached to Intent "extras").
      * @see #startActivityForResult
      * @see #createPendingResult
      * @see #setResult(int)
      */
+
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         name.setText("");
@@ -187,5 +193,27 @@ public class ConsultarActivity extends Activity implements View.OnClickListener 
             e.printStackTrace();
             return producto;
         }
+    }*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(ConsultarActivity.this,ShopCarActivity.class);
+            startActivity(i);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
