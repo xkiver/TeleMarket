@@ -22,6 +22,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private Button boton3;
     private Spinner spinner;
     private String region;
+    //comentario de Luchiin
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
