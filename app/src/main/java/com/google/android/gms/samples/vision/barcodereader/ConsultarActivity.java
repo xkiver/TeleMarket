@@ -19,11 +19,17 @@ package com.google.android.gms.samples.vision.barcodereader;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import static com.google.android.gms.samples.vision.barcodereader.R.id.editText;
 
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
@@ -36,6 +42,9 @@ public class ConsultarActivity extends AppCompatActivity implements View.OnClick
     //cambio menor
     private CompoundButton useFlash;
     private TextView statusMessage;
+    private Button consultar_n;
+    private EditText name;
+    private Button consultar_c;
     private String region;
     private String code_s;
     private String nombre_lugar;
@@ -54,8 +63,50 @@ public class ConsultarActivity extends AppCompatActivity implements View.OnClick
 
         //autoFocus = (CompoundButton) findViewById(R.id.auto_focus);
         useFlash = (CompoundButton) findViewById(R.id.use_flash);
+        consultar_n = (Button) findViewById(R.id.button6);
+        consultar_c = (Button) findViewById(R.id.read_barcode);
+        name = (EditText) findViewById(editText);
 
-        findViewById(R.id.read_barcode).setOnClickListener(this);
+        //Filtro para que contenga sólo 1 espacio por caracter y sólo admitir dígitos y letras
+        InputFilter filter = new InputFilter() {
+            boolean canEnterSpace = false;
+
+            public CharSequence filter(CharSequence source, int start, int end,
+                                       Spanned dest, int dstart, int dend) {
+
+                if(name.getText().toString().equals(""))
+                {
+                    canEnterSpace = false;
+                }
+
+                StringBuilder builder = new StringBuilder();
+
+                for (int i = start; i < end; i++) {
+                    char currentChar = source.charAt(i);
+
+                    if (Character.isLetterOrDigit(currentChar)) {
+                        builder.append(currentChar);
+                        canEnterSpace = true;
+                    }
+
+                    if(Character.isWhitespace(currentChar) && canEnterSpace) {
+                        builder.append(currentChar);
+                        canEnterSpace = false;
+                    }
+
+
+                }
+                return builder.toString();
+            }
+
+        };
+
+
+        name.setFilters(new InputFilter[]{filter});
+
+
+        consultar_n.setOnClickListener(this);
+        consultar_c.setOnClickListener(this);
 
 
         Intent i = getIntent();
@@ -82,23 +133,42 @@ public class ConsultarActivity extends AppCompatActivity implements View.OnClick
      */
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.read_barcode) {
-            // launch barcode activity.
-            Intent intent = new Intent(this, BarcodeCaptureActivity.class);
-            //intent.putExtra(BarcodeCaptureActivity.AutoFocus, autoFocus.isChecked());
-            intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
-            intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
-            intent.putExtra("REGION",region);
-            intent.putExtra("CODE_S",code_s);
-            intent.putExtra("VISTA",vista);
-            if(vista==1){
-                intent.putExtra("NOMBRE_LUGAR",nombre_lugar);
-            }
 
-            //startActivityForResult(intent, RC_BARCODE_CAPTURE);
-            startActivity(intent);
+        switch (v.getId()){
+            //POR CODIGO
+            case R.id.read_barcode:
+                Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+                //intent.putExtra(BarcodeCaptureActivity.AutoFocus, autoFocus.isChecked());
+                intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
+                intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
+                intent.putExtra("REGION",region);
+                intent.putExtra("CODE_S",code_s);
+                intent.putExtra("VISTA",vista);
+                if(vista==1){
+                    intent.putExtra("NOMBRE_LUGAR",nombre_lugar);
+                }
+
+                //startActivityForResult(intent, RC_BARCODE_CAPTURE);
+                startActivity(intent);
+                break;
+            //POR NOMBRE
+            case R.id.button6:
+                Intent intent2 = new Intent(this, RespuestaActivity.class);
+                //intent.putExtra(BarcodeCaptureActivity.AutoFocus, autoFocus.isChecked());
+                intent2.putExtra("REGION",region);
+                intent2.putExtra("CODE_S",code_s);
+                intent2.putExtra("VISTA",vista);
+                intent2.putExtra("ID",name.getText().toString());
+                intent2.putExtra("NAME",1);
+                if(vista==1){
+                    intent2.putExtra("NOMBRE_LUGAR",nombre_lugar);
+                }
+
+                //startActivityForResult(intent, RC_BARCODE_CAPTURE);
+                startActivity(intent2);
+                break;
+
         }
-
     }
 
     /**
@@ -222,4 +292,6 @@ public class ConsultarActivity extends AppCompatActivity implements View.OnClick
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

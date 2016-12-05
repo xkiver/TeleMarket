@@ -31,7 +31,7 @@ public class MyAsyncTaskInternet {
     }
 
     public void executeMyAsynctask(final RespuestaActivity activity, final RecyclerView mRecyclerView, final int number,
-                                   final String region,final String code_s, final String code_p, final int vista, final String nombre_lugar) {
+                                   final String region,final String code_s, final String code_p, final int vista, final String nombre_lugar, final int name) {
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -40,8 +40,16 @@ public class MyAsyncTaskInternet {
 
             @Override
             protected String doInBackground(Void... params) {
-                String resultado = new Server().connectToServer("http://telemarket.telprojects.xyz/?s"+region+code_s+"c"+code_p, 15000);
-                //String resultado = new Server().connectToServer("http://www.mocky.io/v2/5844b708110000fa110e6b84", 15000);
+                String resultado;
+                if (name==0){
+                    resultado = new Server().connectToServer("http://telemarket.telprojects.xyz/?s"+region+code_s+"c"+code_p, 15000);
+                    //resultado = new Server().connectToServer("http://www.mocky.io/v2/5844b708110000fa110e6b84", 15000);
+                }
+                else{
+                    resultado = new Server().connectToServer("http://telemarket.telprojects.xyz/?s"+region+code_s+"n"+code_p, 15000);
+                    //resultado = new Server().connectToServer("http://www.mocky.io/v2/5844b708110000fa110e6b84", 15000);
+                }
+
                 return resultado;
             }
 

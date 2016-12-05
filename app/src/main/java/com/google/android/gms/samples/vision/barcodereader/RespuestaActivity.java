@@ -9,7 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.gms.samples.vision.barcodereader.modelo.Producto;
-import com.google.android.gms.vision.barcode.Barcode;
+
+import java.text.Normalizer;
 
 /**
  * Created by Patricio on 01-12-2016.
@@ -19,11 +20,13 @@ public class RespuestaActivity extends AppCompatActivity {
     private Producto producto;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private Barcode best;
+    private String best;
+    private String best2;
     private String code_s;
     private String region;
     private int vista;
     private String nombre_lugar;
+    private int name;
     private boolean first = true;
 
     protected void onCreate(Bundle savedInstanceState){
@@ -33,9 +36,8 @@ public class RespuestaActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         Bundle extras = i.getExtras();
-        BarcodeCaptureActivity.fa.finish();
         if (extras != null) {
-            best = (Barcode) extras.get("ID");
+            best = (String) extras.get("ID");
             code_s = (String) extras.get("CODE_S");
             region = (String) extras.get("REGION");
             vista = (int) extras.get("VISTA");
@@ -45,7 +47,27 @@ public class RespuestaActivity extends AppCompatActivity {
             else {
                 nombre_lugar = "Ningun_lugar";
             }
-            MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,region,code_s,best.displayValue, vista, nombre_lugar);
+            name = (int) extras.get("NAME");
+            if(name == 0){
+                BarcodeCaptureActivity.fa.finish();
+                MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,region,code_s,best, vista, nombre_lugar,name);
+            }
+            else{
+                String limpio;
+                String valor = best;
+                valor = valor.toUpperCase();
+                // Normalizar texto para eliminar acentos, dieresis, cedillas y tildes
+                limpio = Normalizer.normalize(valor, Normalizer.Form.NFD);
+                // Quitar caracteres no ASCII excepto la enie, interrogacion que abre, exclamacion que abre, grados, U con dieresis.
+                limpio = limpio.replaceAll("[^\\p{ASCII}(N\u0303)(n\u0303)(\u00A1)(\u00BF)(\u00B0)(U\u0308)(u\u0308)]", "");
+                // Regresar a la forma compuesta, para poder comparar la enie con la tabla de valores
+                limpio = Normalizer.normalize(limpio, Normalizer.Form.NFC);
+                limpio = limpio.trim();
+                best2 = limpio.replaceAll("\\s", "_");
+                best2=remove1(best2);
+                MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,region,code_s,best2, vista, nombre_lugar,name);
+            }
+
             /*url = "http://telemarket.telprojects.xyz/?"+best.displayValue;
             AsyncTask<Void, Void, String> show = new AsyncTask<Void, Void, String>() {
 
@@ -83,7 +105,13 @@ public class RespuestaActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         if (!first){
-            MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,region,code_s,best.displayValue, vista, nombre_lugar);
+            if(name == 0){
+                MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,region,code_s,best, vista, nombre_lugar,name);
+            }
+            else{
+                best2 = best.replaceAll(" ", "-");
+                MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,region,code_s,best2, vista, nombre_lugar,name);
+            }
         }
 
     }
@@ -130,5 +158,17 @@ public class RespuestaActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public static String remove1(String input) {
+        // Cadena de caracteres original a sustituir.
+        String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ";
+        // Cadena de caracteres ASCII que reemplazarán los originales.
+        String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC";
+        String output = input;
+        for (int i=0; i<original.length(); i++) {
+            // Reemplazamos los caracteres especiales.
+            output = output.replace(original.charAt(i), ascii.charAt(i));
+        }//for i
+        return output;
     }
 }

@@ -422,10 +422,11 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
             setResult(CommonStatusCodes.SUCCESS, data);
             finish();*/
             Intent i = new Intent(BarcodeCaptureActivity.this,RespuestaActivity.class);
-            i.putExtra("ID",best);
+            i.putExtra("ID",best.displayValue);
             i.putExtra("CODE_S",code_s);
             i.putExtra("REGION",region);
             i.putExtra("VISTA",vista);
+            i.putExtra("NAME",0);
             if(vista==1){
                 i.putExtra("NOMBRE_LUGAR",nombre_lugar);
             }
