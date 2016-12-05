@@ -69,6 +69,8 @@ public class MyAsyncTaskBD {
                 feed.setDescription(res.getString(2));
                 feed.setValor(res.getString(3));
                 feed.setId(res.getInt(4));
+                feed.setSupermercado(res.getString(5));
+                feed.setLugar(res.getString(6));
 
                 feeds.add(feed);
             }

@@ -5,18 +5,17 @@
     <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
     <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>
     <string name="title_activity_main">Telemarket</string>
-    <string name="barcode_header">TeleMarket</string>
+    <string name="barcode_header">Busca tu Producto</string>
     <string name="read_barcode">Consultar</string>
     <string name="auto_focus">Auto Focus</string>
     <string name="use_flash">Usar Flash</string>
     <string name="barcode_success">Producto capturado</string>
     <string name="barcode_failure">Producto no capturado</string>
     <string name="barcode_error">"Error leyendo codigo: %1$s"</string>
-    <string name="add">Agregar a ShopCar</string>
+    <string name="add">Agregar</string>
     <string name="added">Agregado</string>
 
     <string-array name="regions_array">
-        <item>Todas</item>
         <item>I Tarapacá</item>
         <item>II Antofagasta</item>
         <item>III Atacama</item>

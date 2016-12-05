@@ -21,6 +21,9 @@ public class RespuestaActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private Barcode best;
     private String code_s;
+    private String region;
+    private int vista;
+    private String nombre_lugar;
     private boolean first = true;
 
     protected void onCreate(Bundle savedInstanceState){
@@ -33,8 +36,16 @@ public class RespuestaActivity extends AppCompatActivity {
         BarcodeCaptureActivity.fa.finish();
         if (extras != null) {
             best = (Barcode) extras.get("ID");
-            code_s = (String) extras.get("code_s");
-            MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,code_s,best.displayValue);
+            code_s = (String) extras.get("CODE_S");
+            region = (String) extras.get("REGION");
+            vista = (int) extras.get("VISTA");
+            if (vista==1){
+                nombre_lugar = (String) extras.get("NOMBRE_LUGAR");
+            }
+            else {
+                nombre_lugar = "Ningun_lugar";
+            }
+            MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,region,code_s,best.displayValue, vista, nombre_lugar);
             /*url = "http://telemarket.telprojects.xyz/?"+best.displayValue;
             AsyncTask<Void, Void, String> show = new AsyncTask<Void, Void, String>() {
 
@@ -72,7 +83,7 @@ public class RespuestaActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         if (!first){
-            MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,code_s,best.displayValue);
+            MyAsyncTaskInternet.getInstance().executeMyAsynctask(this, mRecyclerView,1,region,code_s,best.displayValue, vista, nombre_lugar);
         }
 
     }

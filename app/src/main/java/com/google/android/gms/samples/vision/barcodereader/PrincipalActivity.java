@@ -50,16 +50,20 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            //Botón Verificar
             case R.id.button2:
                 Intent i = new Intent(PrincipalActivity.this,SupermercadosActivity.class);
                 i.putExtra("REGION",region);
                 startActivity(i);
                 break;
+            //Botón Comparar
             case R.id.button3:
                 Intent i2 = new Intent(PrincipalActivity.this,ConsultarActivity.class);
                 i2.putExtra("REGION",region);
+                i2.putExtra("VISTA",2);
                 startActivity(i2);
                 break;
+            //Botón Oferta
             case R.id.button4:
                 //Intent i3 = new Intent(PrincipalActivity.this,ConsultarActivity.class);
                 //i.putExtra("DATO",dato);
@@ -99,10 +103,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-        if (pos <10){
+        if (pos <9){
             String cero = "0";
-            region = cero+ String.valueOf(pos);
-
+            region = cero+ String.valueOf(pos+1);
+        }
+        else{
+            region = String.valueOf(pos+1);
         }
     }
 

@@ -14,6 +14,8 @@ import android.widget.Button;
 public class SupermercadosActivity extends AppCompatActivity implements View.OnClickListener{
     private Button boton1;
     private String region;
+    private String nombre_lugar = "Unimarc_Quintero";
+    private String code_s = "001";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +23,6 @@ public class SupermercadosActivity extends AppCompatActivity implements View.OnC
 
         boton1 = (Button) findViewById(R.id.button5);
         boton1.setOnClickListener(this);
-
         Intent i = getIntent();
         Bundle extras = i.getExtras();
         if (extras != null) {
@@ -34,6 +35,10 @@ public class SupermercadosActivity extends AppCompatActivity implements View.OnC
         switch (view.getId()){
             case R.id.button5:
                 Intent i = new Intent(SupermercadosActivity.this,ConsultarActivity.class);
+                i.putExtra("REGION",region);
+                i.putExtra("CODE_S",code_s);
+                i.putExtra("NOMBRE_LUGAR",nombre_lugar);
+                i.putExtra("VISTA",1);
                 startActivity(i);
                 break;
         }

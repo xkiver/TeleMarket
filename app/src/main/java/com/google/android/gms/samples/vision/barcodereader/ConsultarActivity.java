@@ -25,8 +25,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.google.android.gms.samples.vision.barcodereader.modelo.Producto;
-
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
  * reads barcodes.
@@ -38,14 +36,11 @@ public class ConsultarActivity extends AppCompatActivity implements View.OnClick
     //cambio menor
     private CompoundButton useFlash;
     private TextView statusMessage;
-    private TextView barcodeValue;
-    private TextView name;
-    private TextView description;
-    private String code_s ="00000";
-
-    private String url;
-    private Producto producto;
     private String region;
+    private String code_s;
+    private String nombre_lugar;
+    private int vista;
+
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
@@ -56,9 +51,6 @@ public class ConsultarActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_main);
 
         statusMessage = (TextView)findViewById(R.id.status_message);
-        barcodeValue = (TextView)findViewById(R.id.barcode_value);
-        name = (TextView)findViewById(R.id.name);
-        description = (TextView)findViewById(R.id.description);
 
         //autoFocus = (CompoundButton) findViewById(R.id.auto_focus);
         useFlash = (CompoundButton) findViewById(R.id.use_flash);
@@ -70,6 +62,15 @@ public class ConsultarActivity extends AppCompatActivity implements View.OnClick
         Bundle extras = i.getExtras();
         if (extras != null) {
             region = (String) extras.get("REGION");
+            vista = (int) extras.get("VISTA");
+            if (vista==1){
+                code_s = (String) extras.get("CODE_S");
+                nombre_lugar = (String) extras.get("NOMBRE_LUGAR");
+            }
+            else {
+                code_s = "000";
+            }
+
         }
 
     }
@@ -87,7 +88,12 @@ public class ConsultarActivity extends AppCompatActivity implements View.OnClick
             //intent.putExtra(BarcodeCaptureActivity.AutoFocus, autoFocus.isChecked());
             intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
             intent.putExtra(BarcodeCaptureActivity.UseFlash, useFlash.isChecked());
-            intent.putExtra("code_s", code_s);
+            intent.putExtra("REGION",region);
+            intent.putExtra("CODE_S",code_s);
+            intent.putExtra("VISTA",vista);
+            if(vista==1){
+                intent.putExtra("NOMBRE_LUGAR",nombre_lugar);
+            }
 
             //startActivityForResult(intent, RC_BARCODE_CAPTURE);
             startActivity(intent);

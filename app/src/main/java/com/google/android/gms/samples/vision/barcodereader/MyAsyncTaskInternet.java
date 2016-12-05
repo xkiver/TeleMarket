@@ -31,7 +31,7 @@ public class MyAsyncTaskInternet {
     }
 
     public void executeMyAsynctask(final RespuestaActivity activity, final RecyclerView mRecyclerView, final int number,
-                                   final String code_s, final String code_p) {
+                                   final String region,final String code_s, final String code_p, final int vista, final String nombre_lugar) {
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -40,8 +40,8 @@ public class MyAsyncTaskInternet {
 
             @Override
             protected String doInBackground(Void... params) {
-                //String resultado = new Server().connectToServer("http://telemarket.telprojects.xyz/?s"+code_s+"c"+code_p, 15000);
-                String resultado = new Server().connectToServer("http://www.mocky.io/v2/5841ae5d100000320cbb4ccf", 15000);
+                String resultado = new Server().connectToServer("http://telemarket.telprojects.xyz/?s"+region+code_s+"c"+code_p, 15000);
+                //String resultado = new Server().connectToServer("http://www.mocky.io/v2/5844b708110000fa110e6b84", 15000);
                 return resultado;
             }
 
@@ -52,7 +52,7 @@ public class MyAsyncTaskInternet {
                     System.out.println(result);
 
                     //Why god... why
-                    mAdapter = new DataAdapter(activity, getFeeds(result),number);
+                    mAdapter = new DataAdapter(activity, getFeeds(result, vista, nombre_lugar),number);
                     mRecyclerView.setAdapter(mAdapter);
                 }
             }
@@ -60,9 +60,9 @@ public class MyAsyncTaskInternet {
 
         task.execute();
     }
-    public List<Producto> getFeeds(String result) {
+    public List<Producto> getFeeds(String result, int vista, String nombre_lugar) {
         List<Producto> listaProductos = new ArrayList<>();
-
+        String place;
         try {
             JSONArray lista = new JSONArray(result);
             int size = lista.length();
@@ -79,6 +79,17 @@ public class MyAsyncTaskInternet {
                 }
 
                 prod.setValor(objeto.getString("value"));
+                if (vista==1){
+                    String[] parts = nombre_lugar.split("_");
+                    prod.setSupermercado(parts[0]);
+                    prod.setLugar(parts[1]);
+                }
+                else {
+                    place = objeto.getString("place");
+                    String[] parts = place.split("_");
+                    prod.setSupermercado(parts[0]);
+                    prod.setLugar(parts[1]);
+                }
                 listaProductos.add(prod);
             }
 

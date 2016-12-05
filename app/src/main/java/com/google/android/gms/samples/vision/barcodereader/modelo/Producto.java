@@ -10,6 +10,7 @@ public class Producto{
     private String description;
     private String valor;
     private String supermercado;
+    private String lugar;
     private boolean inCarrito;
 
     public void setId(int id){
@@ -52,6 +53,10 @@ public class Producto{
     public void setSupermercado(String supermercado) { this.supermercado = supermercado; }
 
     public String getSupermercado() { return supermercado; }
+
+    public void setLugar(String lugar) { this.lugar = lugar; }
+
+    public String getLugar() { return lugar; }
 
 
 }

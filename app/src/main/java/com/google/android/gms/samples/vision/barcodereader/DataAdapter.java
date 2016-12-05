@@ -28,6 +28,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         public TextView mTextView1;
         public TextView mTextView2;
         public TextView mTextView3;
+        public TextView mTextView4;
+        public TextView mTextView5;
 
         public ImageView mImageView;
         public Button mAddBtn;
@@ -37,6 +39,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
             mTextView1 = (TextView) v.findViewById(R.id.textName);
             mTextView2 = (TextView) v.findViewById(R.id.textDescription);
             mTextView3 = (TextView) v.findViewById(R.id.textValor);
+            mTextView4 = (TextView) v.findViewById(R.id.supermercado);
+            mTextView5 = (TextView) v.findViewById(R.id.lugar);
             mAddBtn = (Button) v.findViewById(R.id.add_btn);
             //if (numero==2){
             //    mAddBtn.setVisibility(View.GONE);
@@ -65,6 +69,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         holder.mTextView1.setText(prod.getNombre());
         holder.mTextView2.setText(prod.getDescription());
         holder.mTextView3.setText(prod.getValor());
+        holder.mTextView4.setText(prod.getSupermercado());
+        holder.mTextView5.setText(prod.getLugar());
         /*holder.mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,7 +88,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         if(total.getCount() == 0 && numero == 2) {
             Toast.makeText(mContext, "USTED NO POSEE FAVORITOS", Toast.LENGTH_LONG).show();
         }
-        Cursor res = myDB.getThatData(prod.getNombre());
+        Cursor res = myDB.getThatData(prod.getNombre(),prod.getSupermercado(),prod.getLugar());
         if(res.getCount() == 0) {prod.setInCarrito(false);}
         else{ prod.setInCarrito(true);}
 
@@ -102,10 +108,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                     myDB.insertData(prod.getNombre(),
                             prod.getDescription(),
                             prod.getValor(),
-                            prod.getCode());
+                            prod.getCode(),
+                            prod.getSupermercado(),
+                            prod.getLugar());
                     holder.mAddBtn.setText(mContext.getString(R.string.added));
                 } else {
-                    myDB.deleteData(prod.getNombre());
+                    myDB.deleteData(prod.getNombre(),prod.getSupermercado(),prod.getLugar());
                     holder.mAddBtn.setText(mContext.getString(R.string.add));
                 }
             }

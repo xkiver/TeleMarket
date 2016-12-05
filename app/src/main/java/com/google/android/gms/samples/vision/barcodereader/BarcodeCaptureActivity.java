@@ -74,6 +74,9 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
     public static final String AutoFocus = "AutoFocus";
     public static final String UseFlash = "UseFlash";
     public String code_s;
+    public int vista;
+    private String nombre_lugar;
+    private String region;
     public static final String BarcodeObject = "Barcode";
 
     private CameraSource mCameraSource;
@@ -100,8 +103,13 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         // read parameters from the intent used to launch the activity.
         boolean autoFocus = getIntent().getBooleanExtra(AutoFocus, true);
         boolean useFlash = getIntent().getBooleanExtra(UseFlash, false);
-        code_s = (String) getIntent().getExtras().get("code_s");
-        System.out.println("Codigo en cámara: "+code_s);
+        code_s = (String) getIntent().getExtras().get("CODE_S");
+        region = (String) getIntent().getExtras().get("REGION");
+        vista = (int) getIntent().getExtras().get("VISTA");
+        if (vista == 1){
+            nombre_lugar = (String) getIntent().getExtras().get("NOMBRE_LUGAR");
+        }
+
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
@@ -415,7 +423,12 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
             finish();*/
             Intent i = new Intent(BarcodeCaptureActivity.this,RespuestaActivity.class);
             i.putExtra("ID",best);
-            i.putExtra("code_s",code_s);
+            i.putExtra("CODE_S",code_s);
+            i.putExtra("REGION",region);
+            i.putExtra("VISTA",vista);
+            if(vista==1){
+                i.putExtra("NOMBRE_LUGAR",nombre_lugar);
+            }
             //i.putExtra(BarcodeObject,best);
             startActivity(i);
             return true;
