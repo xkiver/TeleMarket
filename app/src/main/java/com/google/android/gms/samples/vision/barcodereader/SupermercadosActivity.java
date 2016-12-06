@@ -3,6 +3,8 @@ package com.google.android.gms.samples.vision.barcodereader;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,10 +18,13 @@ public class SupermercadosActivity extends AppCompatActivity implements View.OnC
     private String region;
     private String nombre_lugar = "Unimarc_Quintero";
     private String code_s = "001";
+    private RecyclerView RecycV;
+    private RecyclerView.LayoutManager LayMan;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.supermercados);
+        createMyRecyclerView();
 
         boton1 = (Button) findViewById(R.id.button5);
         boton1.setOnClickListener(this);
@@ -50,6 +55,13 @@ public class SupermercadosActivity extends AppCompatActivity implements View.OnC
         return super.onCreateOptionsMenu(menu);
     }
 
+    public void createMyRecyclerView() {
+        RecycV = (RecyclerView) findViewById(R.id.supers);
+        RecycV.setHasFixedSize(true);
+
+        LayMan = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecycV.setLayoutManager(LayMan);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
